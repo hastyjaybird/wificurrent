@@ -1,7 +1,8 @@
 /*
  *  Simple HTTP get webclient test
  */
-
+#include <SPI.h>
+#include <Ethernet.h>
 #include <ESP8266WiFi.h>
 //
 //const char* ssid     = "Jodog's Network";
@@ -13,10 +14,14 @@
 const char* ssid = "ffflava";
 const char* password = "packettt";
 const char* host = "192.168.1.137";
+
+char outBuf[128];
  
 //String current = "666";
-float current() {
- return analogRead(A0); 
+String current() {
+ static char outstr[15];
+ dtostrf(analogRead(A0),5,1,outstr);
+ return outstr; 
 }
 
 void setup() {
@@ -35,7 +40,7 @@ void setup() {
   
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
+    Serial.println("searching for long range comms...");
   }
 
   Serial.println("");
@@ -69,28 +74,22 @@ void loop() {
   Serial.print("Requesting URL: ");
   Serial.println(url);
 
+// POST /data HTTP/1.1
+// User-Agent: curl/7.35.0
+// Host: 192.168.1.137:5000
+// Accept: */*
+// Content-Length: 10
+// Content-Type: application/x-www-form-urlencoded
 
-    // EDIT: The POST 'URL' to the location of your insert_mysql.php on your web-host
-    client.println("POST /data HTTP/1.1");
-
-    // EDIT: 'Host' to match your domain
-    client.print("POST /data HTTP/1.0\n");
-    client.print("Host: 192.168.1.137\n");
-    client.print("Connection: close\n");
-//    client.print("X-THINGSPEAKAPIKEY: " + APIKey + "\n");
-//    client.print("Content-Type: application/x-www-form-urlencoded\n");
-//    client.print("Content-Length: ");
-//    client.print(current.length());
-    client.print("\n\n");
-//    client.print(current);    
-
-
-
-  
-//  // This will send the request to the server
-//  client.print(String("POST ") + url + current + " HTTP/1.1\r\n" +
-//               "Host: " + host + "\r\n" + 
-//               "Connection: close\r\n\r\n");
+  client.print("POST /data HTTP/1.1\r\n"  
+               "User-Agent: curl/7.35.0\r\n"
+               "Host: 192.168.1.137:5000\r\n"
+               "Accept: */*\r\n"
+               "Content-Length: 10\r\n"
+               "Content-Type: application/x-www-form-urlencoded\r\n");
+  client.print("pin1=54321");
+  //client.print("pin1="+current()+"\r\n");
+  client.print("Connection: close\r\n");            
   delay(500);
   
   // Read all the lines of the reply from server and print them to Serial
