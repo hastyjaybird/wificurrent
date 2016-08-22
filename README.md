@@ -1,4 +1,5 @@
 # wificurrent
+[hardware]: ./hardware.jpg
 
 in this directory with the flasktest.py file enter:
 	export FLASK_APP=flasktest.py
