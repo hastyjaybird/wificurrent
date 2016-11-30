@@ -5,29 +5,19 @@
 #include <Ethernet.h>
 #include <ESP8266WiFi.h>
 
+//Change the following:
+//***************
+const char* ssid = "router name"; //name of router that both the ESP8266 and the host computer are connected to.
+const char* password = "password"; //password for router. if none just leave as "";
 
-//ID of module
-String id = "01";
+/*on the computer that will be hosting flask open terminal and type ipconfig (windows) or ifconfig (linux).
+set the host value to the ip address of the host computer on the router that they will both be connected to. 
+*/
+const char* host = "ip address";
+String id = "01"; //ID of ESP8266 module, this will be in the output in the file that flask creates and appends to. 
+//****************
 
 
-//
-//const char* ssid     = "Jodog's Network";
-//const char* password = "R1234567";
-
-//const char* ssid     = "hearth-new";
-//const char* password = "education";
-//
-//const char* ssid = "ffflava";
-//const char* password = "packettt";
-
-const char* ssid = "sudomesh";
-const char* password = "";
-
-const char* host = "192.168.196.128";
-
-//char outBuf[128];
- 
-//String current = "666";
 String current() {
  static char outstr[15];
  dtostrf(analogRead(A0),5,1,outstr);
@@ -40,15 +30,16 @@ void setup() {
   delay(100);
 
   // We start by connecting to a WiFi network
-
   Serial.println();
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
-  
 //  WiFi.begin(ssid, password);
   WiFi.begin(ssid);
   
+
+
+//print things from the ESP serial port for troubleshooting
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.println("searching for long range comms...");
@@ -59,10 +50,9 @@ void setup() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   Serial.println(current());
-  
 }
 
-int value = 0;
+int value = 0; //counter
 
 void loop() {
   delay(1000);
@@ -85,18 +75,10 @@ void loop() {
   Serial.print("Requesting URL: ");
   Serial.println(url);
 
-// POST /data HTTP/1.1
-// User-Agent: curl/7.35.0
-// Host: 192.168.1.137:5000
-// Accept: */*
-// Content-Length: 10
-// Content-Type: application/x-www-form-urlencoded
-
-//
 
   client.print("POST /data HTTP/1.1\r\n"  
                "User-Agent: curl/7.38.0\r\n"
-               "Host: 192.168.1.137:5000\r\n"
+               "Host: 192.168.1.137:5000\r\n" 
                "Accept: */*\r\n"
                "Content-Length: 19\r\n"
                "Content-Type: application/x-www-form-urlencoded\r\n"
@@ -104,34 +86,7 @@ void loop() {
                "pin1="+current()+"&"
                "name="+id+"\r\n");
                
-             
-               
-    
 
-//
-//  client.println("POST /data HTTP/1.1");
-//  client.println("Host: 192.168.1.137");
-//  client.println("Content-Type: text/html");
-//  client.println("Content-Length: 3");
-//  client.println(thisdata);
-//  client.println("Connection: close\r\n");
-  
-
-//
-//  
-//  client.println(F("Connection: close\r\n application/x-www-form-urlencoded"));
-//  sprintf(outBuf,"Content-Length: 3");
-//  client.println(outBuf);
-//
-//   // send the body (variables)
-//  client.print(thisdata);
-
-
-
-
-
-
-            
   delay(1000);
 
   

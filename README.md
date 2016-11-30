@@ -1,9 +1,17 @@
 # wificurrent
 ![picture of the hardware][hardware]
 
-in this directory with the flasktest.py file enter:
+For the arduino code for the ESP8266, change the router name, password, and host address [ipv4 address of computer hosting flask]
+
+To run Flask:
+in this directory with the flasktest.py file enter
+for linux:
 
 	export FLASK_APP=flasktest.py
+	flask run --host=0.0.0.0
+
+for windows:
+	set FLASK_APP=flasktest.py
 	flask run --host=0.0.0.0
 
 to test the server:
