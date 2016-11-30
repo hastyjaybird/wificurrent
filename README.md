@@ -11,6 +11,7 @@ for linux:
 	flask run --host=0.0.0.0
 
 for windows:
+
 	set FLASK_APP=flasktest.py
 	flask run --host=0.0.0.0
 
